@@ -15,5 +15,5 @@ const VueApp: any = Vue;
 new VueApp({
 	store,
 	vuetify,
-	render: (h: any) => h(App),
+	// render: (h: any) => h(App),
 }).$mount('#app');
