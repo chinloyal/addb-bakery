@@ -12,5 +12,18 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('splash.home');
+})->name('home');
+
+Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
+
+	Route::get('/sign-up', [
+		'uses' => 'RegisterController@index',
+		'as' => 'register'
+	]);
+
+	Route::post('/sign-up', [
+		'uses' => 'RegisterController@store',
+		'as' => 'register.post'
+	]);
 });

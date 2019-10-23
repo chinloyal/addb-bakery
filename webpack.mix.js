@@ -55,5 +55,18 @@ mix.webpackConfig({
 });
 
 mix.ts('resources/js/app.ts', 'public/js')
-	.sass('resources/sass/app.scss', 'public/css')
-	.extract(['vue', 'vuetify', 'vuelidate']);
+	.extract(['vue', 'vuetify', 'vuelidate'])
+	.sourceMaps();
+
+mix.sass('resources/sass/app.scss', 'public/css').sass(
+	'resources/sass/landing.scss',
+	'public/css'
+);
+
+mix.copyDirectory('resources/img', 'public/img');
+
+if (mix.inProduction()) {
+	mix.version();
+} else {
+	mix.browserSync('http://localhost:8000');
+}

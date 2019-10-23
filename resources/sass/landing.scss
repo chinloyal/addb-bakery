@@ -1,0 +1,17 @@
+#main-bg {
+	background-image: url('/img/bakery-bg.webp');
+	background-size: cover;
+	background-position: center center;
+}
+
+#landing-title {
+	border: 2px solid #f48fb1;
+	border-radius: 5px;
+	padding: 20px 0px;
+	max-width: 40%;
+	background-color: #ce93d8;
+}
+
+#landing-title::content {
+	filter: blur(8px);
+}
