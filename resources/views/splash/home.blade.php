@@ -26,7 +26,7 @@
 
 @section('content')
 <v-layout row wrap style="position: absolute; top: 20px; right: 20px; height: auto">
-    <v-btn color="white" outlined>Login</v-btn>&nbsp;&nbsp;
+	<v-btn color="white" outlined href="{{ route('auth.login') }}">Login</v-btn>&nbsp;&nbsp;
 	<v-btn color="primary" outlined href="{{ route('auth.register') }}">Sign up</v-btn>
 </v-layout>
 <v-layout justify-center align-center>

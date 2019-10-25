@@ -52,21 +52,3 @@
 </v-layout>
 @endsection
 
-@push('scripts')
-<script type="text/javascript">
-
-	// var vm1 = new Vue({
-	// 	el: '#signup-form-card',
-	// 	data: {
-	// 		test: 'test'
-	// 	},
-	// 	methods: {
-	// 		here: function(){
-	// 			console.log(1);
-	// 		}
-	// 	}
-	// });
-
-	// console.log(vm1.test);
-</script>
-@endpush

@@ -13,8 +13,9 @@
 
 Route::get('/', function () {
     return view('splash.home');
-})->name('home');
+})->name('home')->middleware('guest');
 
+# Guest Routes
 Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
 
 	Route::get('/sign-up', [
@@ -26,4 +27,20 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
 		'uses' => 'RegisterController@store',
 		'as' => 'register.post'
 	]);
+
+	Route::get('/login', [
+		'uses' => 'LoginController@showLoginForm',
+		'as' => 'login'
+	]);
+
+	Route::post('/login', [
+		'uses' => 'LoginController@login',
+		'as' => 'login.post'
+	]);
+});
+
+Route::group(['middleware' => 'auth'], function () {
+	Route::get('/dashboard', function(){
+		return view('dashboard.index');
+	})->name('dashboard');
 });

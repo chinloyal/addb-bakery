@@ -52,6 +52,11 @@ mix.webpackConfig({
 		extensions: ['*', '.js', '.ts', '.tsx', '.vue', '.json'],
 		plugins: [new TsConfigPathsPlugin()],
 	},
+	optimization: {
+		concatenateModules: false,
+		providedExports: false,
+		usedExports: false,
+	},
 });
 
 mix.ts('resources/js/app.ts', 'public/js')
@@ -68,5 +73,5 @@ mix.copyDirectory('resources/img', 'public/img');
 if (mix.inProduction()) {
 	mix.version();
 } else {
-	mix.browserSync('http://localhost:8000');
+	// mix.browserSync('http://localhost:8000');
 }

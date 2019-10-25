@@ -38,7 +38,7 @@ class RegisterController extends Controller
     {
 		if($customer_type == 'individual') {
 			return Validator::make($data, [
-				'first_name' => ['required', 'string', 'max:255'],
+				'first_name' => ['required', 'string', 'min:2'],
 				'last_name' => ['required', 'string', 'min:2'],
 				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 				'password' => ['required', 'min:6', 'confirmed'],
@@ -46,7 +46,7 @@ class RegisterController extends Controller
 			]);
 		}else if ($customer_type == 'corporate') {
 			return Validator::make($data, [
-				'first_name' => ['required', 'string', 'max:255'],
+				'first_name' => ['required', 'string', 'min:2'],
 				'last_name' => ['required', 'string', 'min:2'],
 				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 				'password' => ['required', 'string', 'min:6', 'confirmed'],
@@ -73,12 +73,16 @@ class RegisterController extends Controller
 			return redirect()->back(400);
 
 		if($validator->fails())
-			return redirect()->back()->with('signUpErrors', $validator->errors());
+			return redirect()->back()->withErrors($validator->errors());
 
 		$result = $this->userRepository->store($request->all(), $request->user_type);
 
 		if($result){
 			return redirect()->route('home');
+		}else{
+			return redirect()->back()->withErrors(
+				collect(['There was an issue signing up user.'])
+			);
 		}
 
     }

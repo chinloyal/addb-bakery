@@ -81,6 +81,7 @@
 			@input="$v.trn.$touch()"
 			@blur="$v.trn.$touch()"
 			v-if="userType == 'corporate'"
+			v-mask="'###-###-###'"
 		></v-text-field>
 		<v-text-field
 			required
@@ -105,13 +106,14 @@
 			@blur="$v.confirm_password.$touch()"
 			v-model="confirm_password"
 		></v-text-field>
-		<v-btn type="submit">submit</v-btn>
-		<v-btn>clear</v-btn>
+		<p>Already have an account? <a href="/login">Login</a></p>
+		<v-btn type="submit" color="primary">sign up</v-btn>
 	</v-form>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
+import { mask } from 'vue-the-mask';
 import { validationMixin } from 'vuelidate';
 import {
 	required,
@@ -121,7 +123,12 @@ import {
 	CustomRule,
 } from 'vuelidate/lib/validators';
 
+const validTrn = value => /^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(value);
+
 @Component({
+	directives: {
+		mask,
+	},
 	mixins: [validationMixin],
 	validations: {
 		fname: {
@@ -145,6 +152,7 @@ import {
 		},
 		trn: {
 			required,
+			validTrn,
 		},
 		password: {
 			required,
@@ -253,6 +261,9 @@ export default class SignUpForm extends Vue {
 		if (!this.$v.trn.$dirty) return errors;
 
 		if (!this.$v.trn.required) errors.push('TRN is required');
+
+		if (!this.$v.trn.validTrn)
+			errors.push('Invalid TRN, format (XXX-XXX-XXX).');
 
 		return errors;
 	}

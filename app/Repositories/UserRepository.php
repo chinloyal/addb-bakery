@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Models\{ User, Individual, Corporate };
+use Illuminate\Auth\Events\Verified;
 
 class UserRepository implements UserRepositoryInterface {
 	const ADMIN = 1;
@@ -58,9 +59,28 @@ class UserRepository implements UserRepositoryInterface {
 			$user->userable_id = $corporate->id;
 			$user->saveOrFail();
 
+			if ($user->markEmailAsVerified()) {
+				event(new Verified($user));
+			}
 			return true;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Used to manually verify email
+	 *
+	 * @param string $email
+	 */
+	public function verifyEmail($email) {
+		$user = User::where('email', $email)->first();
+
+		if(empty($user))
+			return;
+
+		if ($user->markEmailAsVerified()) {
+			event(new Verified($user));
+		}
 	}
 }

@@ -14,7 +14,8 @@
 <body>
     <div id="main-app">
         <v-app>
-            <v-container fluid fill-height id="main-bg">
+			@include('common.error-snackbar')
+			<v-container fluid fill-height id="main-bg">
                 @yield('content')
             </v-container>
         </v-app>

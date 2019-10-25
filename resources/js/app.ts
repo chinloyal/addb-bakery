@@ -20,4 +20,9 @@ new VueApp({
 	vuetify,
 	components,
 	// render: (h: any) => h(App),
+	data() {
+		return {
+			snackbar: true,
+		};
+	},
 }).$mount('#main-app');
