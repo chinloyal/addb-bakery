@@ -37,6 +37,11 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
 		'uses' => 'LoginController@login',
 		'as' => 'login.post'
 	]);
+
+	Route::post('/logout', [
+		'uses' => 'LoginController@logout',
+		'as' => 'logout'
+	]);
 });
 
 Route::group(['middleware' => 'auth'], function () {

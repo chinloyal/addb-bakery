@@ -23,6 +23,12 @@ new VueApp({
 	data() {
 		return {
 			snackbar: true,
+			drawer: true,
 		};
+	},
+	methods: {
+		logout() {
+			this.$refs.logoutForm.submit();
+		},
 	},
 }).$mount('#main-app');
