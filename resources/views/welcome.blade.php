@@ -6,10 +6,10 @@
 
         <title>Laravel</title>
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        {{-- <link rel="stylesheet" href="{{ mix('/css/app.css') }}"> --}}
+        <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
     </head>
     <body>
-		<div id="app">
+		<div id="main-app">
             <v-app>
                 <v-btn color="primary">Hello World</v-btn>
             </v-app>

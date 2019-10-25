@@ -1,6 +1,5 @@
 import Vue, { PluginObject } from 'vue';
 import axios from '$axios';
-import 'nprogress/nprogress.css';
 import * as nprogress from 'nprogress';
 
 // Full config:  https://github.com/axios/axios#request-config

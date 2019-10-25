@@ -14,10 +14,15 @@
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component({
+	name: 'ExampleComponent',
+})
+export default class ExampleComponent extends Vue {
 	mounted() {
 		console.log('Component mounted.');
-	},
-};
+	}
+}
 </script>
