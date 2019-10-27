@@ -2,12 +2,13 @@ import '@babel/polyfill';
 import Vue from 'vue';
 import '@/plugins/axios';
 import vuetify from '@/plugins/vuetify';
-// import App from '@/App.vue';
+import Dialog from '@/plugins/app-dialog';
 import components from '@/components';
-import store from '@/store';
+// import store from '@/store';
 import Vuelidate from 'vuelidate';
 
 Vue.use(Vuelidate);
+Vue.use(Dialog);
 
 Vue.config.productionTip = false;
 
@@ -16,7 +17,6 @@ window.Vue = Vue;
 const VueApp: any = Vue;
 
 new VueApp({
-	store,
 	vuetify,
 	components,
 	// render: (h: any) => h(App),

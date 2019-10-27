@@ -20,7 +20,8 @@ class CreateOrdersTable extends Migration
             $table->date('delivery_date');
             $table->float('cost');
             $table->float('gct')->default(16.5);
-            $table->timestamp('time_of_placement')->useCurrent();
+			$table->boolean('completed')->default(false);
+			$table->timestamp('time_of_placement')->useCurrent();
 
             $table->foreign('employee_id')->references('id')->on('employees');
             $table->foreign('customer_id')->references('id')->on('users');
