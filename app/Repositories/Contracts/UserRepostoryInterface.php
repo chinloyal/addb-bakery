@@ -6,4 +6,5 @@ interface UserRepositoryInterface {
 
 	function store($userData, $type): bool;
 
+	function allEmployees();
 }

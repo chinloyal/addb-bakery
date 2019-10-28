@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'userable_id', 'user_type', 'email_verified_at',
     ];
 
     /**
@@ -46,7 +45,7 @@ class User extends Authenticatable
 
 	public function cando(string $permission_name): bool {
 		$permission_name = Str::slug($permission_name);
-		return !filled($this->permissions()->where('slug', $permission_name)->first());
+		return filled($this->permissions()->where('slug', $permission_name)->first());
 	}
 
 	public function inRole($role_name): bool {

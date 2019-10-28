@@ -49,7 +49,7 @@
 								<v-text-field
 									name="unit_cost"
 									type="number"
-									label="Unit Cost"
+									label="Unit Cost ($)"
 									v-model="selectedProduct.unit_cost"
 								></v-text-field>
 							</v-container>
@@ -124,7 +124,7 @@ export default class ProductsTable extends Vue {
 			value: 'current_quantity',
 		},
 		{
-			text: 'Unit Cost',
+			text: 'Unit Cost ($)',
 			value: 'unit_cost',
 		},
 		{
@@ -241,7 +241,7 @@ export default class ProductsTable extends Vue {
 
 		vm.$dialog.show({
 			title: 'Confirm Delete',
-			message: `Are you sure you want to delete ${product.name}`,
+			message: `Are you sure you want to delete "${product.name}"`,
 			showCancelBtn: true,
 			onConfirm() {
 				axios

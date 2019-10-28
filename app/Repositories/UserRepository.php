@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Models\{ User, Individual, Corporate };
+use App\Models\{ User, Individual, Corporate, Employee};
 use Illuminate\Auth\Events\Verified;
 
 class UserRepository implements UserRepositoryInterface {
@@ -82,5 +82,9 @@ class UserRepository implements UserRepositoryInterface {
 		if ($user->markEmailAsVerified()) {
 			event(new Verified($user));
 		}
+	}
+
+	public function allEmployees() {
+		return Employee::with('user')->get();
 	}
 }

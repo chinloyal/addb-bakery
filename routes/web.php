@@ -50,10 +50,6 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('dashboard.index');
 	})->name('dashboard');
 
-	Route::get('/manage/employees', function(){
-		return view('dashboard.admin.employees');
-	})->name('admin.employees');
-
 	Route::get('/manage/ingredients', function () {
 		return view('dashboard.employee.ingredients');
 	})->name('employee.ingredients')->middleware('role:admin|employee');
@@ -106,4 +102,34 @@ Route::group(['middleware' => 'auth'], function () {
 			'as' => 'products.delete'
 		]);
 	});
+
+	# Admin only API route
+	Route::group([
+		'middleware' => 'role:admin',
+		'prefix' => 'api',
+	], function () {
+		Route::put('/permission/toggle/{permission_id}', [
+			'uses' => 'Auth\\AuthController@togglePermission',
+			'as' => 'permission.toggle'
+		]);
+
+		Route::get('employees', [
+			'uses' => 'UserController@allEmployees',
+			'as' => 'employees.all'
+		]);
+	});
+
+	#Admin only Web route
+	Route::group(['middleware' => 'role:admin'], function(){
+		Route::get('/manage/employees', function () {
+			return view('dashboard.admin.employees');
+		})->name('admin.employees');
+
+		Route::get('/manage/employees/{user_id}/permissions', [
+			'uses' => 'Auth\\AuthController@employeePermissionView',
+			'as' => 'admin.employee.permissions'
+		]);
+
+	});
+
 });

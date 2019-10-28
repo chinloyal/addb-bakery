@@ -238,7 +238,7 @@ export default class IngredientsTable extends Vue {
 
 		vm.$dialog.show({
 			title: 'Confirm Delete',
-			message: `Are you sure you want to delete ${ingredient.name}`,
+			message: `Are you sure you want to delete "${ingredient.name}"`,
 			showCancelBtn: true,
 			onConfirm() {
 				axios
