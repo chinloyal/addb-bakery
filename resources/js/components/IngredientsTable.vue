@@ -64,7 +64,7 @@
 								>Save</v-btn
 							>
 							<v-btn
-								v-else-if="(formAction = 'edit')"
+								v-else-if="formAction == 'edit'"
 								text
 								color="primary darken-1"
 								@click="update"
@@ -191,7 +191,7 @@ export default class IngredientsTable extends Vue {
 			.then(res => {
 				vm.loadingForm = false;
 				vm.close();
-				vm.ingredients.push(res.data);
+				vm.init();
 
 				vm.selectedIngredient = new Ingredient('', '', 0);
 			})

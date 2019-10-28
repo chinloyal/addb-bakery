@@ -67,7 +67,7 @@
 								>Save</v-btn
 							>
 							<v-btn
-								v-else-if="(formAction = 'edit')"
+								v-else-if="formAction == 'edit'"
 								text
 								color="primary darken-1"
 								@click="update"

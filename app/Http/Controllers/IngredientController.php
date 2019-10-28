@@ -10,7 +10,7 @@ class IngredientController extends Controller
 	protected $ingredientsRepo;
 
 	public function __construct(IngredientsRepositoryInterface $ingredientsRepo){
-		// $this->middleware(['cando' => 'Manage Ingredients']);
+		$this->middleware('cando:Manage Ingredients');
 
 		$this->ingredientsRepo = $ingredientsRepo;
 	}

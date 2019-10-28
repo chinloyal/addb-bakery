@@ -52,11 +52,13 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/manage/ingredients', function () {
 		return view('dashboard.employee.ingredients');
-	})->name('employee.ingredients')->middleware('role:admin|employee');
+	})->name('employee.ingredients')
+		->middleware(['role:admin|employee', 'cando:Manage Ingredients']);
 
 	Route::get('/manage/products', function () {
 		return view('dashboard.employee.products');
-	})->name('employee.products')->middleware('role:admin|employee');
+	})->name('employee.products')
+		->middleware(['role:admin|employee', 'cando:Manage Products']);
 
 	# Employee | Admin API Routes
 	Route::group(['middleware' => 'role:admin|employee', 'prefix' => 'api'], function () {
@@ -113,9 +115,14 @@ Route::group(['middleware' => 'auth'], function () {
 			'as' => 'permission.toggle'
 		]);
 
-		Route::get('employees', [
+		Route::get('/employees', [
 			'uses' => 'UserController@allEmployees',
 			'as' => 'employees.all'
+		]);
+
+		Route::post('/employee/create', [
+			'uses' => 'UserController@storeEmployee',
+			'as' => 'register.post'
 		]);
 	});
 

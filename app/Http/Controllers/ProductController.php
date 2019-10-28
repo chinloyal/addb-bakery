@@ -12,7 +12,7 @@ class ProductController extends Controller
 
 	public function __construct(ProductsRepositoryInterface $productsRepo)
 	{
-		// $this->middleware(['cando' => 'Manage Ingredients']);
+		$this->middleware('cando:Manage Products');
 
 		$this->productsRepo = $productsRepo;
 	}

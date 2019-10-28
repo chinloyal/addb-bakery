@@ -51,7 +51,7 @@ class RegisterController extends Controller
 				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 				'password' => ['required', 'string', 'min:6', 'confirmed'],
 				'business_name' => ['required', 'string'],
-				'trn' => ['required', 'min:9', 'max:11']
+				'trn' => ['required', 'min:9', 'max:11', 'unique:corporates']
 			]);
 
 		}
@@ -59,12 +59,12 @@ class RegisterController extends Controller
 		return null;
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
+	/**
+	 * Create a new user instance after a valid registration.
+	 *
+	 * @param  Request $request
+	 * @return Illuminate\Http\RedirectResponse
+	 */
     protected function store(Request $request)
     {
 		$validator = $this->validator($request->all(), $request->user_type);
