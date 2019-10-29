@@ -1,4 +1,4 @@
-<v-list-item href="/">
+<v-list-item href="{{ route('order.place') }}">
 	<v-list-item-action>
 		<v-icon>mdi-cupcake</v-icon>
 	</v-list-item-action>

@@ -139,4 +139,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 	});
 
+	# Customer only
+	Route::group(['middleware' => 'role:customer'], function () {
+		Route::get('order/place', function() {
+			return view('dashboard.customer.orders');
+		})->name('order.place');
+	});
+
 });

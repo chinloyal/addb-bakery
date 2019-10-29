@@ -4,6 +4,7 @@ import EmployeeTable from '@/components/EmployeeTable.vue';
 import IngredientsTable from '@/components/IngredientsTable.vue';
 import ProductsTable from '@/components/ProductsTable.vue';
 import EmployeePermissions from '@/components/EmployeePermissions.vue';
+import CustomerOrders from '@/components/CustomerOrders.vue';
 
 export default {
 	SignUpForm,
@@ -12,4 +13,5 @@ export default {
 	IngredientsTable,
 	ProductsTable,
 	EmployeePermissions,
+	CustomerOrders,
 };
