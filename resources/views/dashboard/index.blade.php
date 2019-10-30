@@ -4,5 +4,5 @@
 
 
 @section('content')
-Welcome, {{ auth()->user()->first_name }}
+Welcome, {{ auth()->user()->full_name }}
 @endsection

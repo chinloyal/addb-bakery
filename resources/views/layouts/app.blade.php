@@ -15,6 +15,7 @@
 	<div id="main-app">
 		<v-app>
 			@include('common.error-snackbar')
+			<app-dialog></app-dialog>
 			<v-container fluid>
 				<v-navigation-drawer v-model="drawer" app clipped>
 					<v-list dense>
@@ -26,14 +27,13 @@
 								<v-list-item-title>Dashboard</v-list-item-title>
 							</v-list-item-content>
 						</v-list-item>
-						<v-list-item href="/">
-							<v-list-item-action>
-								<v-icon>mdi-settings</v-icon>
-							</v-list-item-action>
-							<v-list-item-content>
-								<v-list-item-title>Settings</v-list-item-title>
-							</v-list-item-content>
-						</v-list-item>
+						@role('admin')
+							@include('partials.admin.aside')
+						@elserole('employee')
+							@include('partials.employee.aside')
+						@elserole('customer')
+							@include('partials.customer.aside')
+						@endrole
 						<v-list-item
 							href="{{ route('auth.logout') }}"
 							v-on:click.prevent="logout"
