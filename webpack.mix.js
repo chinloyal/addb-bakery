@@ -22,25 +22,6 @@ function root(args) {
 
 mix.webpackConfig({
 	mode: process.env.NODE_ENV,
-	module: {
-		rules: [
-			{
-				test: /\.tsx?$/,
-				loader: 'ts-loader',
-				options: {
-					appendTsSuffixTo: [/\.vue$/],
-				},
-				exclude: /node_modules/,
-			},
-			{
-				test: /\.js$/i,
-				exclude: /node_modules/,
-				use: {
-					loader: 'babel-loader',
-				},
-			},
-		],
-	},
 	plugins: [new VuetifyLoaderPlugin()],
 	resolve: {
 		alias: {
@@ -52,25 +33,19 @@ mix.webpackConfig({
 		extensions: ['*', '.js', '.ts', '.tsx', '.vue', '.json'],
 		plugins: [new TsConfigPathsPlugin()],
 	},
-	optimization: {
-		concatenateModules: false,
-		providedExports: false,
-		usedExports: false,
-	},
 });
-
-mix.ts('resources/js/app.ts', 'public/js')
-	.extract(['vue', 'vuetify', 'vuelidate'])
-	.sourceMaps();
 
 mix.sass('resources/sass/app.scss', 'public/css').sass(
 	'resources/sass/landing.scss',
 	'public/css'
 );
 
+mix.ts('resources/js/app.ts', 'public/js').extract(['vue', 'vuelidate']);
+
 mix.copyDirectory('resources/img', 'public/img');
 
 if (mix.inProduction()) {
+	mix.sourceMaps();
 	mix.version();
 } else {
 	// mix.browserSync('http://localhost:8000');
