@@ -39,5 +39,33 @@ export default class CustomOrders extends Vue {
 
 	private orders: Array<Order> = [];
 	private loadingTable: boolean | string = false;
+
+	created() {
+		this.init();
+	}
+
+	init() {
+		const vm = this;
+		vm.loadingTable = 'info';
+
+		vm.$axios
+			.get('/api/customer/orders')
+			.then(res => {
+				vm.orders = res.data;
+				vm.loadingTable = false;
+			})
+			.catch(err => {
+				const message =
+					err.response.data.message || 'Unknown server error.';
+
+				vm.$dialog.show({
+					title: 'Error',
+					message,
+					dialogType: 'error',
+				});
+
+				vm.loadingTable = false;
+			});
+	}
 }
 </script>

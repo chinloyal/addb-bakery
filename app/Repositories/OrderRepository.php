@@ -6,6 +6,7 @@ use App\Models\Employee;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\Contracts\OrderRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class OrderRepository implements OrderRepositoryInterface {
 	public function store($data): bool {
@@ -23,5 +24,17 @@ class OrderRepository implements OrderRepositoryInterface {
 		$order->products()->attach($data);
 
 		return true;
+	}
+
+	public function getCustomerOrders(): Collection {
+		return auth()->user()->orders->map(function($order) {
+			return [
+				'delivery_date' => $order->delivery_date,
+				'cost' => $order->cost,
+				'gct' => $order->gct,
+				'employee_name' => $order->employee->user->full_name,
+				'completed' => $order->completed
+			];
+		});
 	}
 }

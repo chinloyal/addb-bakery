@@ -1,4 +1,4 @@
-<v-list-item href="{{ route('order.place') }}">
+<v-list-item href="{{ route('customer.orders') }}">
 	<v-list-item-action>
 		<v-icon>mdi-clipboard-check</v-icon>
 	</v-list-item-action>

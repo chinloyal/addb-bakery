@@ -15,4 +15,8 @@ class Order extends Model
 	public function products(){
 		return $this->belongsToMany(Product::class);
 	}
+
+	public function employee() {
+		return $this->belongsTo(Employee::class);
+	}
 }

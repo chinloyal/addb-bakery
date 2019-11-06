@@ -4,6 +4,7 @@ export class Order {
 		public cost: number,
 		public gct: number,
 		public employee_name: string,
+		public status?: boolean,
 		public id: number = 0 // tslint:disable-line: trailing-comma
 	) {}
 }

@@ -20,4 +20,8 @@ class OrderController extends Controller
 			? response()->json(['message' => 'Order placed successfully'])
 			: reponse()->json(['message' => 'Something went wrong.'], 400);
 	}
+
+	protected function getCustomerOrders() {
+		return response()->json($this->orderRepo->getCustomerOrders());
+	}
 }

@@ -136,18 +136,26 @@ Route::group(['middleware' => 'auth'], function () {
 
 	# Customer only
 	Route::group(['middleware' => 'role:customer'], function () {
-		Route::get('order/place', function() {
+		Route::get('/customer/orders', function() {
 			return view('dashboard.customer.orders');
-		})->name('order.place');
+		})->name('customer.orders');
 
 		Route::get('products', function () {
 			return view('dashboard.customer.products');
 		})->name('customer.products');
 
-		Route::post('/api/order/place', [
-			'uses' => 'OrderController@placeOrder',
-			'as' => 'api.order.place'
-		]);
+		#Customer API's
+		Route::group(['prefix' => 'api'], function () {
+			Route::post('/order/place', [
+				'uses' => 'OrderController@placeOrder',
+				'as' => 'api.order.place'
+			]);
+
+			Route::get('/customer/orders', [
+				'uses' => 'OrderController@getCustomerOrders',
+				'as' => 'api.customer.orders'
+			]);
+		});
 	});
 
 	# API's available to all auth users
