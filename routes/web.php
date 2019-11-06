@@ -84,11 +84,6 @@ Route::group(['middleware' => 'auth'], function () {
 		]);
 
 		# Products routes
-		Route::get('products', [
-			'uses' => 'ProductController@retrieveAll',
-			'as' => 'products'
-		]);
-
 		Route::post('products/store', [
 			'uses' => 'ProductController@store',
 			'as' => 'products.store'
@@ -144,6 +139,22 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('order/place', function() {
 			return view('dashboard.customer.orders');
 		})->name('order.place');
+
+		Route::get('products', function () {
+			return view('dashboard.customer.products');
+		})->name('customer.products');
+
+		Route::post('/api/order/place', [
+			'uses' => 'OrderController@placeOrder',
+			'as' => 'api.order.place'
+		]);
 	});
 
+	# API's available to all auth users
+	Route::group(['prefix' => 'api'], function() {
+		Route::get('products', [
+			'uses' => 'ProductController@retrieveAll',
+			'as' => 'products'
+		]);
+	});
 });

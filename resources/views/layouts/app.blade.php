@@ -59,6 +59,68 @@
 				<v-app-bar app clipped-left color="primary" dark>
 					<v-app-bar-nav-icon v-on:click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 					<v-toolbar-title>{{ env('APP_NAME') }}</v-toolbar-title>
+					@role('customer')
+					<v-spacer></v-spacer>
+					@verbatim
+					<v-menu
+						v-model="$store.state.cartMenu"
+						:close-on-content-click="false"
+						offset-y
+					>
+						<template v-slot:activator="{ on }">
+							<v-btn icon class="mr-2" v-on="on">
+								<v-badge color="info">
+									<template v-slot:badge>{{ $store.getters['cart/count'] }}</template>
+									<v-icon>mdi-cart</v-icon>
+								</v-badge>
+							</v-btn>
+						</template>
+						<v-card>
+							<v-list>
+								<v-list-item>
+									<v-list-item-content>
+										<v-list-item-title>Overview of products</v-list-item-title>
+									</v-list-item-content>
+								</v-list-item>
+							</v-list>
+							<v-divider></v-divider>
+							<v-list v-if="$store.getters['cart/count'] > 0">
+								<v-list-item
+									v-for="product in $store.getters['cart/items']"
+									:key="product.id"
+								>
+									<v-list-item-content>
+										<v-list-item-subtitle>
+											x1 {{ product.name }} (${{ product.unit_cost }})
+										</v-list-item-subtitle>
+									</v-list-item-content>
+								</v-list-item>
+							</v-list>
+							<v-card-text v-else>
+								<v-card-subtitle>No products added.</v-card-subtitle>
+							</v-card-text>
+							<v-divider></v-divider>
+							<v-card-actions>
+								<v-btn
+									color="primary"
+									text
+									v-on:click="$store.dispatch('cart/placeOrder')"
+								>Place order</v-btn>
+								<v-btn
+									text
+									color="error"
+									v-on:click="$store.dispatch('cart/emptyCart')"
+								><v-icon>mdi-delete</v-icon> Empty Cart</v-btn>
+								<v-btn
+									text
+									color="info"
+									v-on:click="$store.commit('setCartMenu', false)"
+								>Cancel</v-btn>
+							</v-card-actions>
+						</v-card>
+					</v-menu>
+					@endverbatim
+					@endrole
 				</v-app-bar>
 
 				<v-content>

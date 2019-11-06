@@ -6,7 +6,6 @@ const Plugin: PluginObject<any> = {
 	install: (Vue, options) => {
 		Plugin.EventBus = new Vue();
 
-		const Dialog = this;
 		Vue.component('app-dialog', AppDialog);
 
 		Vue.prototype.$dialog = {

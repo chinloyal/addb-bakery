@@ -15,4 +15,8 @@ class Employee extends Model
 	public function user() {
 		return $this->morphOne(User::class, 'userable', 'user_type');
 	}
+
+	public function orders() {
+		return $this->hasMany(Order::class);
+	}
 }

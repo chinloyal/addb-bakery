@@ -142,7 +142,7 @@ export default class ProductsTable extends Vue {
 
 	private formTitle: string = '';
 	private formAction: string = '';
-	private selectedProduct: Product = new Product('', '', 0, 0);
+	private selectedProduct: Product = new Product('', 0);
 
 	created() {
 		this.init();
@@ -173,11 +173,7 @@ export default class ProductsTable extends Vue {
 		this.dialog = false;
 	}
 
-	open(
-		title: string,
-		action: string,
-		product: Product = new Product('', '', 0, 0)
-	) {
+	open(title: string, action: string, product: Product = new Product('', 0)) {
 		this.dialog = true;
 		this.formTitle = title;
 		this.formAction = action;
@@ -196,7 +192,7 @@ export default class ProductsTable extends Vue {
 				vm.close();
 				vm.init();
 
-				vm.selectedProduct = new Product('', '', 0, 0);
+				vm.selectedProduct = new Product('', 0);
 			})
 			.catch(err => {
 				vm.loadingForm = false;

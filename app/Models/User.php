@@ -40,7 +40,7 @@ class User extends Authenticatable
 	public $timestamps = false;
 
 	public function userable(){
-		return $this->morphTo();
+		return $this->morphTo('userable', 'user_type');
 	}
 
 	public function cando(string $permission_name): bool {
@@ -70,5 +70,9 @@ class User extends Authenticatable
 
 	public function getFullNameAttribute(){
 		return $this->first_name . ' ' . $this->last_name;
+	}
+
+	public function orders() {
+		return $this->hasMany(Order::class);
 	}
 }

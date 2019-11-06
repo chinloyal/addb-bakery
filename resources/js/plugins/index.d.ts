@@ -1,6 +1,7 @@
 import Vue, { VueConstructor } from 'vue';
+import Vuex from 'vuex';
 import { AxiosInstance } from '$axios';
-import { AppDialogInstance } from './types';
+import { AppDialogInstance } from '@/plugins/types';
 
 declare global {
 	interface Window {
@@ -16,6 +17,12 @@ declare module 'vue/types/vue' {
 	}
 	interface VueConstructor {
 		$axios: AxiosInstance;
+		$dialog: AppDialogInstance;
+	}
+}
+
+declare module 'vuex/types' {
+	interface Store<S> {
 		$dialog: AppDialogInstance;
 	}
 }

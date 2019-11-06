@@ -9,7 +9,9 @@ use Illuminate\Support\ServiceProvider;
 use App\Repositories\IngredientsRepository;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\IngredientsRepositoryInterface;
+use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Repositories\Contracts\ProductsRepositoryInterface;
+use App\Repositories\OrderRepository;
 use App\Repositories\ProductsRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -35,5 +37,6 @@ class RepositoryServiceProvider extends ServiceProvider
 		$this->app->bind(IngredientsRepositoryInterface::class, IngredientsRepository::class);
 		$this->app->bind(ProductsRepositoryInterface::class, ProductsRepository::class);
 		$this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
+		$this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
     }
 }
