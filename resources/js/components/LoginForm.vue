@@ -1,6 +1,6 @@
 <template>
 	<v-card :loading="loading">
-		<v-toolbar color="primary">
+		<v-toolbar color="primary" dark>
 			<v-toolbar-title>Login</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-icon>mdi-account</v-icon>

@@ -55,6 +55,14 @@ class ProductController extends Controller
 		}
 	}
 
+	protected function assignIngredients($id, Request $request) {
+		$result = $this->productsRepo->updateIngredients($id, $request->all());
+
+		return $result
+			? response()->json(['message' => 'Ingredients assigned successfully.'])
+			: response()->json(['message' => 'Unable to assign ingredients to product.'], 400);
+	}
+
 	private function validateRequest(Request $request)
 	{
 		$this->validate($request, [

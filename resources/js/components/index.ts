@@ -6,6 +6,7 @@ import ProductsTable from '@/components/ProductsTable.vue';
 import EmployeePermissions from '@/components/EmployeePermissions.vue';
 import CustomerOrders from '@/components/CustomerOrders.vue';
 import Products from '@/components/Products.vue';
+import EmployeeOrders from '@/components/EmployeeOrders.vue';
 
 export default {
 	SignUpForm,
@@ -16,4 +17,5 @@ export default {
 	EmployeePermissions,
 	CustomerOrders,
 	Products,
+	EmployeeOrders,
 };

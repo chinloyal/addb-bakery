@@ -10,7 +10,7 @@
 				<v-toolbar-title>Products</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-dialog
-					v-model="dialog"
+					v-model="productDialog"
 					max-width="500px"
 					transition="dialog-transition"
 				>
@@ -24,7 +24,7 @@
 							>Add Product</v-btn
 						>
 					</template>
-					<v-card :loading="loadingForm">
+					<v-card :loading="loadingProductForm">
 						<v-card-title>
 							<span class="headline">{{ formTitle }}</span>
 						</v-card-title>
@@ -99,6 +99,62 @@
 			>
 				<v-icon small>mdi-delete</v-icon>
 			</v-btn>
+			<v-dialog
+				v-model="ingredientsDialog"
+				scrollable
+				max-width="500px"
+				transition="dialog-transition"
+			>
+				<template v-slot:activator="{ on }">
+					<v-btn
+						v-on="on"
+						icon
+						color="purple"
+						title="Edit Ingredients"
+						small
+						@click="editIngredients(item)"
+					>
+						<v-icon small>mdi-grain</v-icon>
+					</v-btn>
+				</template>
+				<v-card :loading="loadingIngredientsForm">
+					<v-card-title>
+						<span class="headline">Edit Ingredients</span>
+					</v-card-title>
+					<v-card-text>
+						<v-container>
+							<v-combobox
+								v-model="selectedIngredients"
+								name="ingredient"
+								:items="ingredients"
+								item-text="name"
+								item-value="id"
+								chips
+								deletable-chips
+								multiple
+								return-object
+								label="Click here to select ingredients"
+							></v-combobox>
+						</v-container>
+					</v-card-text>
+					<v-divider></v-divider>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn
+							color="primary"
+							@click="ingredientsDialog = false"
+							text
+							>Close</v-btn
+						>
+						<v-btn
+							color="primary"
+							@click="saveProductIngredients()"
+							text
+							>Save</v-btn
+						>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
 		</template>
 	</v-data-table>
 </template>
@@ -106,6 +162,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Product } from '@/models/Product';
+import { Ingredient } from '@/models/Ingredient';
 import axios from 'axios';
 
 @Component
@@ -135,14 +192,18 @@ export default class ProductsTable extends Vue {
 	];
 
 	private products: Array<Product> = [];
+	private ingredients: Array<Ingredient> = [];
 
 	private loadingTable: string | boolean = false;
-	private loadingForm: string | boolean = false;
-	private dialog: boolean = false;
+	private loadingProductForm: string | boolean = false;
+	private loadingIngredientsForm: string | boolean = false;
+	private productDialog: boolean = false;
+	private ingredientsDialog: boolean = false;
 
 	private formTitle: string = '';
 	private formAction: string = '';
 	private selectedProduct: Product = new Product('', 0);
+	private selectedIngredients: Array<Ingredient> = [];
 
 	created() {
 		this.init();
@@ -158,11 +219,27 @@ export default class ProductsTable extends Vue {
 			.then(res => {
 				vm.products = res.data;
 				vm.loadingTable = false;
+
+				axios
+					.get('/api/ingredients')
+					.then(response => {
+						vm.ingredients = response.data;
+					})
+					.catch(err => {
+						const message =
+							err.response.data.message ||
+							'Unknown error occured.';
+						vm.$dialog.show({
+							title: 'Error',
+							message,
+							dialogType: 'error',
+						});
+					});
 			})
 			.catch(err => {
 				vm.$dialog.show({
 					title: 'Error',
-					message: err,
+					message: err.response.data.message,
 					dialogType: 'error',
 				});
 				vm.loadingTable = false;
@@ -170,11 +247,11 @@ export default class ProductsTable extends Vue {
 	}
 
 	close() {
-		this.dialog = false;
+		this.productDialog = false;
 	}
 
 	open(title: string, action: string, product: Product = new Product('', 0)) {
-		this.dialog = true;
+		this.productDialog = true;
 		this.formTitle = title;
 		this.formAction = action;
 		this.selectedProduct = product;
@@ -183,19 +260,19 @@ export default class ProductsTable extends Vue {
 	save() {
 		let vm = this;
 
-		vm.loadingForm = 'primary';
+		vm.loadingProductForm = 'primary';
 
 		axios
 			.post('/api/products/store', this.selectedProduct)
 			.then(res => {
-				vm.loadingForm = false;
+				vm.loadingProductForm = false;
 				vm.close();
 				vm.init();
 
 				vm.selectedProduct = new Product('', 0);
 			})
 			.catch(err => {
-				vm.loadingForm = false;
+				vm.loadingProductForm = false;
 				vm.$dialog.show({
 					title: 'Error',
 					message: err.response.data.message,
@@ -210,7 +287,7 @@ export default class ProductsTable extends Vue {
 
 	update() {
 		const vm = this;
-		vm.loadingForm = 'primary';
+		vm.loadingProductForm = 'primary';
 
 		axios
 			.post(
@@ -218,7 +295,7 @@ export default class ProductsTable extends Vue {
 				vm.selectedProduct
 			)
 			.then(res => {
-				vm.loadingForm = false;
+				vm.loadingProductForm = false;
 				vm.close();
 				vm.init();
 			})
@@ -228,7 +305,7 @@ export default class ProductsTable extends Vue {
 					message: err.response.data.message,
 					dialogType: 'error',
 				});
-				vm.loadingForm = false;
+				vm.loadingProductForm = false;
 			});
 	}
 
@@ -254,6 +331,45 @@ export default class ProductsTable extends Vue {
 					});
 			},
 		});
+	}
+
+	editIngredients(product: Product) {
+		this.selectedProduct = product;
+		this.selectedIngredients = product.ingredients;
+	}
+
+	saveProductIngredients() {
+		const ingredientsIds = this.selectedIngredients.map(el => {
+			return el.id;
+		});
+
+		this.loadingIngredientsForm = 'info';
+
+		axios
+			.put(
+				`/api/products/update/ingredients/${this.selectedProduct.id}`,
+				ingredientsIds
+			)
+			.then(res => {
+				this.$dialog.show({
+					title: 'Success',
+					message: 'Ingredients saved to product successfully.',
+				});
+
+				this.loadingIngredientsForm = false;
+				this.ingredientsDialog = false;
+				this.init();
+			})
+			.catch(err => {
+				const message =
+					err.response.data.message || 'Unknown server error.';
+
+				this.$dialog.show({
+					title: 'Error',
+					message,
+					dialogType: 'error',
+				});
+			});
 	}
 }
 </script>

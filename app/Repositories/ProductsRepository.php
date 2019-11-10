@@ -7,7 +7,9 @@ use App\Repositories\Contracts\ProductsRepositoryInterface;
 class ProductsRepository implements ProductsRepositoryInterface {
 	public function retrieveAll()
 	{
-		return Product::all();
+		return Product::with(['ingredients' => function($query) {
+			return $query->select('id', 'name');
+		}])->get();
 	}
 
 	public function store(array $productData): Product
@@ -46,5 +48,13 @@ class ProductsRepository implements ProductsRepositoryInterface {
 		} catch (\Exception $e) {
 			return false;
 		}
+	}
+
+	public function updateIngredients(int $id, array $ingredientsIds): bool {
+		$product = Product::findOrFail($id);
+
+		$product->ingredients()->sync($ingredientsIds);
+
+		return true;
 	}
 }

@@ -6,7 +6,7 @@
 <v-layout align-center justify-center>
 	<v-flex xs12 sm8 md4>
 		<v-card id="signup-form-card" elevation-12>
-			<v-toolbar color="primary">
+			<v-toolbar color="primary" dark>
 				<v-toolbar-title>Customer Registration</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-icon>mdi-account-plus</v-icon>

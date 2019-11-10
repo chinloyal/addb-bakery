@@ -5,25 +5,6 @@
 		class="elevation-1"
 		:loading="loadingTable"
 	>
-		<template v-slot:item.completed="{ item }">
-			<v-chip
-				v-if="item.completed == 1"
-				color="success"
-				text-color="white"
-				small
-			>
-				<v-avatar left>
-					<v-icon small>mdi-checkbox-marked-circle</v-icon>
-				</v-avatar>
-				Complete
-			</v-chip>
-			<v-chip v-else color="error" text-color="white" small>
-				<v-avatar left>
-					<v-icon small>mdi-close-circle</v-icon>
-				</v-avatar>
-				Incomplete
-			</v-chip>
-		</template>
 		<template v-slot:item.action="{ item }">
 			<v-dialog
 				v-model="dialog"
@@ -34,6 +15,7 @@
 				<template v-slot:activator="{ on }">
 					<v-btn
 						color="info"
+						mr-2
 						icon
 						small
 						v-on="on"
@@ -81,45 +63,53 @@
 				</v-card>
 			</v-dialog>
 		</template>
+		<template v-slot:item.status="{ item }">
+			<v-switch
+				label="Completed"
+				v-model="item.status"
+				small
+				@change="toggleOrderStatus(item.id)"
+			></v-switch>
+		</template>
 	</v-data-table>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { CustomerOrder } from '@/models/CustomerOrder';
+import { Vue, Component } from 'vue-property-decorator';
+import { EmployeeOrder } from '@/models/EmployeeOrder';
 import { Product } from '@/models/Product';
 
 @Component
-export default class CustomOrders extends Vue {
+export default class EmployeeOrders extends Vue {
 	private headers: Array<Object> = [
 		{
-			text: 'Delivery Date',
-			value: 'delivery_date',
+			text: 'Customer',
+			value: 'customer_name',
 		},
 		{
-			text: 'Cost ($)',
+			text: 'Time of Placement',
+			value: 'time_of_placement',
+		},
+		{
+			text: 'Cost (+ GCT)',
 			value: 'cost',
 		},
 		{
-			text: 'GCT',
-			value: 'gct',
-		},
-		{
-			text: 'Employee Assigned',
-			value: 'employee_name',
-		},
-		{
-			text: 'Status',
-			value: 'completed',
+			text: 'To Be Delivered By',
+			value: 'delivery_date',
 		},
 		{
 			text: 'Actions',
 			value: 'action',
 		},
+		{
+			text: 'Status',
+			value: 'status',
+		},
 	];
 
-	private orders: Array<CustomerOrder> = [];
 	private loadingTable: boolean | string = false;
+	private orders: Array<EmployeeOrder> = [];
 	private dialog: boolean = false;
 	private selectedProducts: Product[] = [];
 	private totalCost: number = 0;
@@ -130,10 +120,11 @@ export default class CustomOrders extends Vue {
 
 	init() {
 		const vm = this;
+
 		vm.loadingTable = 'info';
 
 		vm.$axios
-			.get('/api/customer/orders')
+			.get('/api/employee/orders')
 			.then(res => {
 				vm.orders = res.data;
 				vm.loadingTable = false;
@@ -152,9 +143,38 @@ export default class CustomOrders extends Vue {
 			});
 	}
 
-	viewProducts(order: CustomerOrder) {
+	viewProducts(order: EmployeeOrder) {
 		this.selectedProducts = order.products;
 		this.totalCost = order.cost;
+	}
+
+	toggleOrderStatus(order_id: number) {
+		const vm = this;
+
+		vm.loadingTable = 'info';
+
+		vm.$axios
+			.put(`/api/toggle/order/${order_id}`)
+			.then(res => {
+				vm.$dialog.show({
+					title: 'Order Status',
+					message: 'The order status has been updated.',
+				});
+
+				vm.loadingTable = false;
+			})
+			.catch(err => {
+				const message =
+					err.response.data.message || 'Unknown server error.';
+
+				vm.$dialog.show({
+					title: 'Error',
+					message,
+					dialogType: 'error',
+				});
+
+				vm.loadingTable = false;
+			});
 	}
 }
 </script>

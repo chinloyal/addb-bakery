@@ -98,6 +98,11 @@ Route::group(['middleware' => 'auth'], function () {
 			'uses' => 'ProductController@destroy',
 			'as' => 'products.delete'
 		]);
+
+		Route::put('products/update/ingredients/{id}', [
+			'uses' => 'ProductController@assignIngredients',
+			'as' => 'products.ingredients.update'
+		]);
 	});
 
 	# Admin only API route
@@ -154,6 +159,29 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('/customer/orders', [
 				'uses' => 'OrderController@getCustomerOrders',
 				'as' => 'api.customer.orders'
+			]);
+		});
+	});
+
+	# Employee only
+	Route::group(['middleware' => 'role:employee'], function () {
+
+		#Employee Web
+		Route::get('manage/orders', function() {
+			return view('dashboard.employee.orders');
+		})->name('employee.orders')
+		->middleware('cando:Manage Orders');
+
+		#Employee API's
+		Route::group(['prefix' => 'api'], function () {
+			Route::get('/employee/orders', [
+				'uses' => 'OrderController@getEmployeeOrders',
+				'as' => 'api.employee.orders'
+			]);
+
+			Route::put('toggle/order/{order_id}', [
+				'uses' => 'OrderController@toggleStatus',
+				'as' => 'toggle.order.status'
 			]);
 		});
 	});

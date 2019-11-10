@@ -12,4 +12,6 @@ interface ProductsRepositoryInterface {
 	function update(int $id, array $productData): bool;
 
 	function delete(int $id): bool;
+
+	function updateIngredients(int $id, array $ingredientsIds): bool;
 }

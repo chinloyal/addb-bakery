@@ -28,7 +28,6 @@ const app: Vue = new VueApp({
 		return {
 			snackbar: true,
 			drawer: true,
-			menu: false,
 		};
 	},
 	methods: {

@@ -10,6 +10,7 @@ class OrderController extends Controller
 	protected $orderRepo;
 
 	public function __construct(OrderRepositoryInterface $orderRepo){
+		$this->middleware('cando:Manage Orders')->only('getEmployeeOrders');
 		$this->orderRepo = $orderRepo;
 	}
 
@@ -23,5 +24,19 @@ class OrderController extends Controller
 
 	protected function getCustomerOrders() {
 		return response()->json($this->orderRepo->getCustomerOrders());
+	}
+
+	protected function getEmployeeOrders() {
+		return response()->json($this->orderRepo->getEmployeeOrders());
+	}
+
+	protected function toggleStatus($order_id) {
+		$result = $this->orderRepo->toggleStatus($order_id);
+
+		if($result) {
+			return response()->json(['message' => 'Order status toggled.']);
+		}
+
+		return response()->json(['message' => 'Unable to toggle order status']);
 	}
 }

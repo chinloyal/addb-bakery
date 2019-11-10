@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="csrf-token" content="{{ csrf_token() }}" />
-	<title>Bakery - @yield('title')</title>
+	<title>{{ env('APP_NAME') }} - @yield('title')</title>
 	<link rel="stylesheet" href="{{ mix('/css/app.css') }}">
 	@stack('styles')
 </head>
@@ -69,7 +69,7 @@
 					>
 						<template v-slot:activator="{ on }">
 							<v-btn icon class="mr-2" v-on="on">
-								<v-badge color="info">
+								<v-badge color="info" overlap>
 									<template v-slot:badge>{{ $store.getters['cart/count'] }}</template>
 									<v-icon>mdi-cart</v-icon>
 								</v-badge>
