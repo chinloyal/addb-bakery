@@ -123,7 +123,7 @@
 					</v-card-title>
 					<v-card-text>
 						<v-container>
-							<v-combobox
+							<v-autocomplete
 								v-model="selectedIngredients"
 								name="ingredient"
 								:items="ingredients"
@@ -133,8 +133,10 @@
 								deletable-chips
 								multiple
 								return-object
-								label="Click here to select ingredients"
-							></v-combobox>
+								label="Ingredients"
+								hint="Click to select ingredients."
+								persistent-hint
+							></v-autocomplete>
 						</v-container>
 					</v-card-text>
 					<v-divider></v-divider>
