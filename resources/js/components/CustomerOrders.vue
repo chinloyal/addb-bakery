@@ -25,23 +25,17 @@
 			</v-chip>
 		</template>
 		<template v-slot:item.action="{ item }">
+			<v-btn color="info" icon small @click.stop="viewProducts(item)">
+				<v-icon small>mdi-eye</v-icon>
+			</v-btn>
+		</template>
+		<template v-slot:footer>
 			<v-dialog
 				v-model="dialog"
 				scrollable
 				transition="dialog-transition"
 				max-width="500px"
 			>
-				<template v-slot:activator="{ on }">
-					<v-btn
-						color="info"
-						icon
-						small
-						v-on="on"
-						@click="viewProducts(item)"
-					>
-						<v-icon small>mdi-eye</v-icon>
-					</v-btn>
-				</template>
 				<v-card>
 					<v-card-text>
 						<v-list>
@@ -55,7 +49,10 @@
 										{{ product.name }}
 									</v-list-item-title>
 									<v-list-item-subtitle>
-										${{ product.unit_cost }}
+										{{
+											product.unit_cost
+												| gct(selectedOrder)
+										}}
 									</v-list-item-subtitle>
 								</v-list-item-content>
 							</v-list-item>
@@ -89,7 +86,14 @@ import { Component, Vue } from 'vue-property-decorator';
 import { CustomerOrder } from '@/models/CustomerOrder';
 import { Product } from '@/models/Product';
 
-@Component
+@Component({
+	filters: {
+		gct(cost, order: CustomerOrder) {
+			const gctToBeAdded = ((order.gct / 100) * cost).toFixed(2);
+			return `$${cost} (+ $${gctToBeAdded})`;
+		},
+	},
+})
 export default class CustomOrders extends Vue {
 	private headers: Array<Object> = [
 		{
@@ -122,6 +126,7 @@ export default class CustomOrders extends Vue {
 	private loadingTable: boolean | string = false;
 	private dialog: boolean = false;
 	private selectedProducts: Product[] = [];
+	private selectedOrder: CustomerOrder = null;
 	private totalCost: number = 0;
 
 	created() {
@@ -153,8 +158,10 @@ export default class CustomOrders extends Vue {
 	}
 
 	viewProducts(order: CustomerOrder) {
+		this.selectedOrder = order;
 		this.selectedProducts = order.products;
 		this.totalCost = order.cost;
+		this.dialog = true;
 	}
 }
 </script>

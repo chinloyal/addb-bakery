@@ -15,4 +15,8 @@ class Product extends Model
 	public function ingredients() {
 		return $this->belongsToMany(Ingredient::class);
 	}
+
+	public function getUnitCostAttribute($unit_cost) {
+		return number_format($unit_cost, 2);
+	}
 }

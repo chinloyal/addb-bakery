@@ -15,7 +15,13 @@ class OrderController extends Controller
 	}
 
     protected function placeOrder(Request $request) {
-		$result = $this->orderRepo->store($request->all());
+		$result = false;
+		$product_ids = $request->all();
+
+		if(count($product_ids) > 0)
+			$result = $this->orderRepo->store($product_ids);
+		else
+			return response()->json(['message' => 'No products were selected.'], 400);
 
 		return $result
 			? response()->json(['message' => 'Order placed successfully'])

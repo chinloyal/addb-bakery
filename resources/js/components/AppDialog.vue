@@ -10,9 +10,14 @@
 			<v-divider></v-divider>
 			<v-card-actions>
 				<v-spacer></v-spacer>
-				<v-btn v-if="showCancelBtn" text :color="dialogType">{{
-					cancelBtnText
-				}}</v-btn>
+				<v-btn
+					v-if="showCancelBtn"
+					text
+					:color="dialogType"
+					@click="close"
+				>
+					{{ cancelBtnText }}
+				</v-btn>
 				<v-btn :color="dialogType" text @click="ok">{{
 					okBtnText
 				}}</v-btn>

@@ -6,24 +6,25 @@
 		:loading="loadingTable"
 	>
 		<template v-slot:item.action="{ item }">
+			<v-btn color="info" mr-2 icon small @click="viewProducts(item)">
+				<v-icon small>mdi-eye</v-icon>
+			</v-btn>
+		</template>
+		<template v-slot:item.status="{ item }">
+			<v-switch
+				label="Completed"
+				v-model="item.status"
+				small
+				@change="toggleOrderStatus(item.id)"
+			></v-switch>
+		</template>
+		<template v-slot:footer>
 			<v-dialog
 				v-model="dialog"
 				scrollable
 				transition="dialog-transition"
 				max-width="500px"
 			>
-				<template v-slot:activator="{ on }">
-					<v-btn
-						color="info"
-						mr-2
-						icon
-						small
-						v-on="on"
-						@click="viewProducts(item)"
-					>
-						<v-icon small>mdi-eye</v-icon>
-					</v-btn>
-				</template>
 				<v-card>
 					<v-card-text>
 						<v-list>
@@ -37,18 +38,21 @@
 										{{ product.name }}
 									</v-list-item-title>
 									<v-list-item-subtitle>
-										${{ product.unit_cost }}
+										{{
+											product.unit_cost
+												| gct(selectedOrder)
+										}}
 									</v-list-item-subtitle>
 								</v-list-item-content>
 							</v-list-item>
 							<v-list-item>
 								<v-list-item-content>
-									<v-list-item-title
-										>Total Cost:
+									<v-list-item-title>
+										Total Cost (+ GCT):
 									</v-list-item-title>
-									<span class="success--text"
-										>${{ totalCost }}</span
-									>
+									<span class="success--text">
+										${{ totalCost }}
+									</span>
 								</v-list-item-content>
 							</v-list-item>
 						</v-list>
@@ -63,14 +67,6 @@
 				</v-card>
 			</v-dialog>
 		</template>
-		<template v-slot:item.status="{ item }">
-			<v-switch
-				label="Completed"
-				v-model="item.status"
-				small
-				@change="toggleOrderStatus(item.id)"
-			></v-switch>
-		</template>
 	</v-data-table>
 </template>
 
@@ -79,7 +75,14 @@ import { Vue, Component } from 'vue-property-decorator';
 import { EmployeeOrder } from '@/models/EmployeeOrder';
 import { Product } from '@/models/Product';
 
-@Component
+@Component({
+	filters: {
+		gct(cost, order: EmployeeOrder) {
+			const gctToBeAdded = ((order.gct / 100) * cost).toFixed(2);
+			return `$${cost} (+ $${gctToBeAdded})`;
+		},
+	},
+})
 export default class EmployeeOrders extends Vue {
 	private headers: Array<Object> = [
 		{
@@ -112,6 +115,7 @@ export default class EmployeeOrders extends Vue {
 	private orders: Array<EmployeeOrder> = [];
 	private dialog: boolean = false;
 	private selectedProducts: Product[] = [];
+	private selectedOrder: EmployeeOrder = null;
 	private totalCost: number = 0;
 
 	created() {
@@ -144,8 +148,10 @@ export default class EmployeeOrders extends Vue {
 	}
 
 	viewProducts(order: EmployeeOrder) {
+		this.selectedOrder = order;
 		this.selectedProducts = order.products;
 		this.totalCost = order.cost;
+		this.dialog = true;
 	}
 
 	toggleOrderStatus(order_id: number) {

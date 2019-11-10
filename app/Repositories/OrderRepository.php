@@ -28,9 +28,10 @@ class OrderRepository implements OrderRepositoryInterface {
 
 	public function getCustomerOrders(): Collection {
 		return auth()->user()->orders->map(function($order) {
+			$cost = $order->getOriginal('cost');
 			return [
 				'delivery_date' => $order->time_of_placement->addDay()->format('d M, Y @ h:i A'),
-				'cost' => $order->cost,
+				'cost' => number_format(($cost * ($order->gct / 100)) + $cost, 2),
 				'gct' => $order->gct,
 				'employee_name' => $order->employee->user->full_name,
 				'completed' => $order->completed,
@@ -41,15 +42,16 @@ class OrderRepository implements OrderRepositoryInterface {
 
 	public function getEmployeeOrders(): Collection {
 		return auth()->user()->userable->orders->map(function($order) {
-			$cost = $order->cost;
+			$cost = $order->getOriginal('cost');
 			return [
 				'id' => $order->id,
 				'delivery_date' => $order->time_of_placement->addDay()->format('d M, Y @ h:i A'),
 				'time_of_placement' => $order->time_of_placement->format('d M, Y @ h:i A'),
 				'customer_name' => $order->customer->full_name,
-				'cost' => (($cost * ($order->gct / 100)) + $cost),
+				'cost' => number_format(($cost * ($order->gct / 100)) + $cost, 2),
 				'products' => $order->products,
-				'status' => $order->completed
+				'status' => $order->completed,
+				'gct' => $order->gct
 			];
 		});
 	}

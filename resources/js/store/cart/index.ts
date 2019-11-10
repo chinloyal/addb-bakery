@@ -11,6 +11,7 @@ const storage = SecureStorage.getInstance();
 
 export const state: CartState = {
 	items: storage.get('cartItems') || [],
+	loading: false,
 };
 
 export const cart: Module<CartState, RootState> = {

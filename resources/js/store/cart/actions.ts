@@ -9,9 +9,11 @@ export const actions: ActionTree<CartState, RootState> = {
 		commit('addItemToCart', product);
 	},
 
-	placeOrder({ getters, dispatch }) {
+	placeOrder({ getters, dispatch, commit }) {
 		const dialog = this.$dialog;
 		const store = this;
+		commit('setLoading', 'info');
+
 		axios
 			.post('/api/order/place', getters.request)
 			.then(res => {
@@ -22,6 +24,7 @@ export const actions: ActionTree<CartState, RootState> = {
 
 				dispatch('emptyCart');
 				store.commit('setCartMenu', false);
+				commit('setLoading', false);
 			})
 			.catch(err => {
 				const message =
@@ -32,6 +35,7 @@ export const actions: ActionTree<CartState, RootState> = {
 					message,
 					dialogType: 'error',
 				});
+				commit('setLoading', false);
 			});
 	},
 

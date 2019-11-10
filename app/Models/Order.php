@@ -32,4 +32,8 @@ class Order extends Model
 		$this->completed = !$this->completed;
 		$this->save();
 	}
+
+	public function getCostAttribute($cost) {
+		return number_format($cost, 2);
+	}
 }

@@ -75,7 +75,7 @@
 								</v-badge>
 							</v-btn>
 						</template>
-						<v-card>
+						<v-card :loading="$store.getters['cart/loading']">
 							<v-list>
 								<v-list-item>
 									<v-list-item-content>

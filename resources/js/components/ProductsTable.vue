@@ -99,24 +99,23 @@
 			>
 				<v-icon small>mdi-delete</v-icon>
 			</v-btn>
+			<v-btn
+				icon
+				color="purple"
+				title="Edit Ingredients"
+				small
+				@click.stop="editIngredients(item)"
+			>
+				<v-icon small>mdi-grain</v-icon>
+			</v-btn>
+		</template>
+		<template v-slot:footer>
 			<v-dialog
 				v-model="ingredientsDialog"
 				scrollable
 				max-width="500px"
 				transition="dialog-transition"
 			>
-				<template v-slot:activator="{ on }">
-					<v-btn
-						v-on="on"
-						icon
-						color="purple"
-						title="Edit Ingredients"
-						small
-						@click="editIngredients(item)"
-					>
-						<v-icon small>mdi-grain</v-icon>
-					</v-btn>
-				</template>
 				<v-card :loading="loadingIngredientsForm">
 					<v-card-title>
 						<span class="headline">Edit Ingredients</span>
@@ -338,6 +337,7 @@ export default class ProductsTable extends Vue {
 	editIngredients(product: Product) {
 		this.selectedProduct = product;
 		this.selectedIngredients = product.ingredients;
+		this.ingredientsDialog = true;
 	}
 
 	saveProductIngredients() {

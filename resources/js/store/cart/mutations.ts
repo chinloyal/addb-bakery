@@ -15,4 +15,8 @@ export const mutations: MutationTree<CartState> = {
 		state.items = [];
 		storage.remove('cartItems');
 	},
+
+	setLoading(state, value: boolean | string) {
+		state.loading = value;
+	},
 };

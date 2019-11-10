@@ -6,6 +6,7 @@ import { Product } from '@/models/Product';
 export const getters: GetterTree<CartState, RootState> = {
 	items: state => state.items,
 	count: state => state.items.length,
+	loading: state => state.loading,
 	inCart: state => (product: Product) => {
 		const result = state.items.find(prod => {
 			return prod.id === product.id;
