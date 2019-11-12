@@ -82,7 +82,7 @@
 			</v-toolbar>
 		</template>
 		<template v-slot:item.action="{ item }">
-			<v-btn
+			<!-- <v-btn
 				@click="edit(item)"
 				icon
 				color="info"
@@ -91,7 +91,7 @@
 				title="Edit"
 			>
 				<v-icon small>mdi-pencil</v-icon>
-			</v-btn>
+			</v-btn> -->
 			<v-btn
 				@click="deleteItem(item)"
 				icon
@@ -204,33 +204,33 @@ export default class EmployeeTable extends Vue {
 		this.dialog = false;
 	}
 
-	edit(employee: Employee) {
-		this.open('Edit Employee', 'edit', employee);
-	}
+	// edit(employee: Employee) {
+	// 	this.open('Edit Employee', 'edit', employee);
+	// }
 
-	update() {
-		const vm = this;
-		vm.loadingForm = 'primary';
+	// update() {
+	// 	const vm = this;
+	// 	vm.loadingForm = 'primary';
 
-		axios
-			.post(
-				`/api/ingredients/update/${vm.selectedEmployee.id}`,
-				vm.selectedEmployee
-			)
-			.then(res => {
-				vm.loadingForm = false;
-				vm.close();
-				vm.init();
-			})
-			.catch(err => {
-				vm.$dialog.show({
-					title: 'Error',
-					message: err.response.data.message,
-					dialogType: 'error',
-				});
-				vm.loadingForm = false;
-			});
-	}
+	// 	axios
+	// 		.post(
+	// 			`/api/ingredients/update/${vm.selectedEmployee.id}`,
+	// 			vm.selectedEmployee
+	// 		)
+	// 		.then(res => {
+	// 			vm.loadingForm = false;
+	// 			vm.close();
+	// 			vm.init();
+	// 		})
+	// 		.catch(err => {
+	// 			vm.$dialog.show({
+	// 				title: 'Error',
+	// 				message: err.response.data.message,
+	// 				dialogType: 'error',
+	// 			});
+	// 			vm.loadingForm = false;
+	// 		});
+	// }
 
 	save() {
 		let vm = this;
